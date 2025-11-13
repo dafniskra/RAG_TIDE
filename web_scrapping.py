@@ -20,24 +20,52 @@ import os
 from selenium.webdriver.chrome.service import Service
 import requests
 
-#%%
-page = requests.get("https://www.etreproprio.com/annonces")
-soup = BeautifulSoup(page.content, "html.parser")
+for j in range(10):
+    page = requests.get("https://www.etreproprio.com/annonces/thflcpo.odd.g"+str(j)+"#list")
+    soup = BeautifulSoup(page.content, "html.parser")
 
-#%%
-#%%
-temp = soup.find("div", class_='ep-search-list-wrapper').find_all("a")
+    temp = soup.find("div", class_='ep-search-list-wrapper').find_all("a")
+    
+    liens = []
+    for i in range(len(temp)):
 
-#%%
-liens = []
-for i in range(len(temp)):
-    print()
-    if "https://www.etreproprio.com/immobilier-" in temp[i]['href']:
-        liens.append(temp[i]['href'])
+        if "https://www.etreproprio.com/immobilier-" in temp[i]['href']:
+            liens.append(temp[i]['href'])
+
+    for lien in liens:
+        page_ = requests.get(lien)
+        soup_ = BeautifulSoup(page_.content, "html.parser")   
+        
+        try:
+            prix = soup_.find("div", class_='ep-price').text.replace(" ", "")
+        except:
+            prix=0
+        
+        try:
+            ch = soup_.find("div", class_='ep-ff-room-area').find("div", class_='ep-room').text.replace(" ", "")
+        except:
+            ch=0
         
         
-        
-        
+        print("page: ", j, ", prix: ", prix,', chambre: ',ch)
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+  
         
         
         
